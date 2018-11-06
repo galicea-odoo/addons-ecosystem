@@ -1,0 +1,79 @@
+<section class="oe_container">
+    <div class="oe_row oe_spaced">
+        <div class="oe_span12">
+          <h2 class="oe_slogan">Galicea Environment Check-up</h2>
+          <h3 class="oe_slogan">
+            Programmatically validate Odoo environment, including internal and external dependencies of your add-on
+          </h3>
+          This add-on allows you to:
+          <ul>
+            <li>programmatically check software dependencies required by your add-on, as well as inform the Administrator as to how to meet them,</li>
+            <li>add custom verification for Odoo instance set-up and inform the Administrator about any inconsistencies.</li>
+          </ul>
+          <h2>Add-on dependency verification</h2>
+          <img class="oe_picture oe_screenshot" src="images/dependencies_screenshot.png" />
+          <h3>How-to</h3>
+          Just add <tt>'environment_checkup'</tt> entry to <tt>__manifest__.py</tt>.
+          <pre>
+{
+    ...
+    'environment_checkup': {
+        'dependencies': {
+            'python': [
+                {
+                    'name': 'Crypto',
+                    'version': '>=2.6.2',
+                    'install': "pip install 'PyCrypto>=2.6.1'"
+                },
+            ],
+            'external': [
+                {
+                    'name': 'wkhtmltopdf',
+                    'install': "apt install wkhtmltopdf"
+                },
+                {
+                    'name': 'git',
+                    'version': '^3.0.0',
+                    'install': "apt install git"
+                }
+            ],
+            'internal': [
+                {
+                    'name': 'web',
+                    'version': '~10.0.1.0'
+                }
+            ]
+        }
+    }
+}
+        </pre>
+        <h2>Custom environment verification</h2>
+        <img class="oe_picture oe_screenshot" src="images/custom_screenshot.png" />
+        <h3>How-to</h3>
+        1. Add the check, e.g. in the <tt>system_checks.py</tt> file:
+        <pre>
+# -*- coding: utf-8 -*-
+
+import cgi
+from odoo.addons.galicea_environment_checkup import custom_check, CheckSuccess, CheckWarning, CheckFail
+
+@custom_check
+def check_mail(env):
+    users_without_emails = env['res.users'].sudo().search([('email', '=', False)])
+
+    if users_without_emails:
+        raise CheckWarning(
+            'Some users don\'t have their e-mails set up.',
+            details='See user <tt>{}</tt>.'.format(cgi.escape(users_without_emails[0].name))
+        )
+
+    return CheckSuccess('All users have their e-mails set.')
+        </pre>
+        2. Make sure it's loaded by <tt>__init__.py</tt>
+        <pre>
+# -*- coding: utf-8 -*-
+from . import system_checks
+        </pre>
+      </div>
+    </div>
+</section>

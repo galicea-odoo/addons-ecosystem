@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 {
-    'name': "Galicea Enviromnent Check-up",
+    'name': "Galicea Environment Check-up",
 
     'summary': """
         Programmatically validate environment, including internal and external
@@ -22,6 +22,11 @@
     ],
 
     'qweb': ['static/src/xml/templates.xml'],
+
+    'images': [
+        'static/description/images/custom_screenshot.png',
+        'static/description/images/dependencies_screenshot.png'
+    ],
 
     'installable': True
 }
