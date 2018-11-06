@@ -1,0 +1,9 @@
+<odoo>
+  <data>
+    <template id="assets_backend" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+        <script src="/galicea_environment_checkup/static/src/js/environment_checkup.js" type="text/javascript" />
+      </xpath>
+    </template>
+  </data>
+</odoo>

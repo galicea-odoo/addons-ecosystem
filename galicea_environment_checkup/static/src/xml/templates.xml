@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<templates xml:space="preserve">
+  <t t-name="GaliceaEnvironmentCheckupIcon">
+    <li>
+      <a href="#" t-att-title="result == 'success' ? 'No system setup issues' : 'Found '+count+' system setup issues'">
+        <t t-if="result == 'success'">
+          <i class="fa fa-check" style="opacity:0.5"></i>
+        </t>
+        <t t-if="result == 'warning'">
+          <i class="fa fa-exclamation-triangle" style="color: orange"></i>
+        </t>
+        <t t-if="result == 'fail'">
+          <i class="fa fa-exclamation-circle" style="color: red"></i>
+        </t>
+        <t t-if="result != 'success'">
+          <span><t t-raw="count" /></span>
+        </t>
+      </a>
+    </li>
+  </t>
+
+  <t t-name="GaliceaEnvironmentChecks">
+    <div class="row">
+      <t t-foreach="data" t-as="check">
+        <div class="col-md-12">
+          <div style="display: flex; background-color: white; padding: 10px; margin: 10px">
+            <div style="flex-grow: 0; flex-shrink: 0; width:50px; margin-right: 20px">
+              <t t-if="check.result == 'success'">
+                <i class="fa fa-check fa-4x" style="color: green" aria-hidden="true"></i>
+              </t>
+              <t t-if="check.result == 'warning'">
+                <i class="fa fa-exclamation-triangle fa-4x" style="color: orange" aria-hidden="true"></i>
+              </t>
+              <t t-if="check.result == 'fail'">
+                <i class="fa fa-exclamation-circle fa-4x" style="color: red" aria-hidden="true"></i>
+              </t>
+            </div>
+            <div style="flex-grow: 1; flex-shrink: 1">
+              Module: <t t-esc="check.module" />
+              <h4><t t-esc="check.message" /></h4>
+              <div>
+                <t t-raw="check.details" />
+              </div>
+            </div>
+          </div>
+        </div>
+      </t>
+    </div>
+  </t>
+
+  <t t-name="GaliceaEnvironmentCheckupDashboard">
+    <div class="container">
+      <div class="row">
+        <div class="col-md-12">
+          <h2>Environment check-up</h2>
+          <t t-call="GaliceaEnvironmentChecks">
+            <t t-set="data" t-value="data" />
+          </t>
+        </div>
+      </div>
+    </div>
+  </t>
+
+  <t t-name="GaliceaEnvironmentCheckupFormWidget">
+    <h1>Module dependencies</h1>
+    <t t-call="GaliceaEnvironmentChecks">
+      <t t-set="data" t-value="data" />
+    </t>
+  </t>
+</templates>

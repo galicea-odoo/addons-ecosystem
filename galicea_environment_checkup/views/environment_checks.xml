@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <template id="stale_modules">
+    <p>The following modules need to be upgraded:</p>
+    <ul>
+      <t t-foreach="modules" t-as="module">
+        <li>
+          <a t-att-href="'#id={}&amp;view_type=form&amp;model=ir.module.module'.format(module.id)">
+            <t t-esc="module.shortdesc" /> (technical name: <t t-esc="module.name" />;
+            version on disk: <strong><t t-esc="module.installed_version" /></strong>;
+            version in DB: <strong><t t-esc="module.latest_version" /></strong>)
+          </a>
+        </li>
+      </t>
+    </ul>
+  </template>
+</odoo>
