@@ -1,0 +1,49 @@
+# -*- coding: utf-8 -*-
+{
+    'name': "Galicea OpenID Connect Provider",
+
+    'summary': """OpenID Connect Provider and OAuth2 resource server""",
+
+    'author': "Maciej Wawro",
+    'maintainer': "Galicea",
+    'website': "http://galicea.pl",
+
+    'category': 'Technical Settings',
+    'version': '10.0.1.0',
+
+    'depends': ['web', 'galicea_environment_checkup'],
+
+    'external_dependencies': {
+        'python': ['jwcrypto', 'cryptography']
+    },
+
+    'data': [
+        'security/security.xml',
+        'security/ir.model.access.csv',
+        'security/init.yml',
+
+        'views/views.xml',
+        'views/templates.xml'
+    ],
+
+    'environment_checkup': {
+        'dependencies': {
+            'python': [
+                {
+                    'name': 'jwcrypto',
+                    'install': "pip install 'jwcrypto==0.5.0'"
+                },
+                {
+                    'name': 'cryptography',
+                    'version': '>=2.3',
+                    'install': "pip install 'cryptography>=2.3'"
+                }
+            ]
+        }
+    },
+
+    'images': [
+        'static/description/images/custom_screenshot.png',
+        'static/description/images/dependencies_screenshot.png'
+    ]    
+}

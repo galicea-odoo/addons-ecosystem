@@ -1,0 +1,4 @@
+-
+  !python {model: ir.config_parameter}: |
+      from odoo.addons.galicea_openid_connect.security import init_keys
+      init_keys(self)

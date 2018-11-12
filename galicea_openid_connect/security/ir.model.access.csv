@@ -1,0 +1,5 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_client,client,model_galicea_openid_connect_client,galicea_openid_connect.group_admin,1,1,1,1
+access_client_system_user,client_system_user,model_galicea_openid_connect_client,galicea_openid_connect.group_system_user,1,0,0,0
+access_access_token,access_token,model_galicea_openid_connect_access_token,galicea_openid_connect.group_admin,1,0,0,1
+access_client_access_token,client_access_token,model_galicea_openid_connect_client_access_token,galicea_openid_connect.group_admin,1,0,0,1

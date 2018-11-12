@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <record id="module_category_openid_connect" model="ir.module.category">
+    <field name="name">OpenID Connect Provider</field>
+  </record>
+
+  <record id="group_system_user" model="res.groups">
+    <field name="name">OpenID Client's system user</field>
+    <field name="category_id" ref="module_category_openid_connect" />
+    <field name="implied_ids" eval="[(4,ref('base.group_public'))]" />
+  </record>
+
+  <record id="group_admin" model="res.groups">
+    <field name="name">OpenID Connect Provider Administrator</field>
+    <field name="category_id" ref="module_category_openid_connect" />
+  </record>
+
+  <record id="base.group_erp_manager" model="res.groups">
+    <field name="implied_ids" eval="[(4,ref('group_admin'))]" />
+  </record>
+
+  <record id="client_system_user_access_rule" model="ir.rule">
+    <field name="name">OpenID system users can only see corresponding clients</field>
+    <field name="model_id" ref="model_galicea_openid_connect_client"/>
+    <field name="groups" eval="[(4, ref('group_system_user'))]"/>
+    <field name="domain_force">
+      [('system_user_id', '=', user.id)]
+    </field>
+    <field eval="1" name="perm_read" />
+    <field eval="0" name="perm_write" />
+    <field eval="0" name="perm_create" />
+    <field eval="0" name="perm_unlink" />
+  </record>
+
+</odoo>

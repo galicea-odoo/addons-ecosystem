@@ -1,0 +1,24 @@
+<odoo>
+  <data>
+    <template id="error" name="OpenID/OAuth user-visible error">
+      <t t-call="web.layout">
+        <t t-set="head">
+            <t t-call-assets="web.assets_common" t-js="false"/>
+            <t t-call-assets="web.assets_frontend" t-js="false"/>
+            <t t-call-assets="web.assets_common" t-css="false"/>
+            <t t-call-assets="web.assets_frontend" t-css="false"/>
+        </t>
+        <t t-set="body_classname" t-value="'container'"/>
+
+        <div class="row">
+          <div class="panel panel-danger">
+            <div class="panel-heading">OpenID Client is misconfigured</div>
+            <div class="panel-body">
+              <b><t t-esc="exception.type"/>: </b><t t-esc="exception.message"/>
+            </div>
+          </div>
+        </div>
+      </t>
+    </template>
+  </data>
+</odoo>
