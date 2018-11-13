@@ -43,7 +43,8 @@
     },
 
     'images': [
-        'static/description/images/custom_screenshot.png',
-        'static/description/images/dependencies_screenshot.png'
-    ]    
+        'static/description/images/master_screenshot.png',
+        'static/description/images/client_screenshot.png',
+        'static/description/images/login_screenshot.png'
+    ]
 }
