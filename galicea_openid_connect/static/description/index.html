@@ -69,6 +69,12 @@ Now, the users of <tt>client.odoo.com</tt> will be able to login using new <tt>L
 <img class="oe_picture oe_screenshot" src="images/login_screenshot.png" />
 In case they are already logged into <tt>master.odoo.com</tt>, all they need to do is to click it. Otherwise, they will be redirected to <tt>master.odoo.com</tt> to provide their credentials.
 
+<div class="alert alert-danger" role="alert">
+  <b>Warning!</b> The user of <tt>master.odoo.com</tt> will not be able to log into <tt>client.odoo.com</tt> if there already is a regular account with the same e-mail address in <tt>client.odoo.com</tt>. In that case you will see this message:
+  <img class="oe_picture oe_screenshot" src="images/error_screenshot.png" />
+</div>
+
+
           <h2>Creating JSON APIs with OAuth2 authorization</h2>
           <p>Along with the ID token, it's possible for the OpenID Connect Client to request access token, that can be used to authorize access to a custom JSON API.</p>
           <p>You can create such API in a way that is similar to creating regular Odoo controllers:</p>

@@ -45,6 +45,7 @@
     'images': [
         'static/description/images/master_screenshot.png',
         'static/description/images/client_screenshot.png',
-        'static/description/images/login_screenshot.png'
+        'static/description/images/login_screenshot.png',
+        'static/description/images/error_screenshot.png'
     ]
 }
