@@ -114,7 +114,7 @@ class Main(http.Controller):
             'jwks_uri': base_url + 'oauth/jwks',
             'scopes_supported': ['openid'],
             'response_types_supported': RESPONSE_TYPES_SUPPORTED,
-            'grant_types_supported': ['authorization_code', 'implicit'],
+            'grant_types_supported': ['authorization_code', 'implicit', 'password', 'client_credentials'],
             'subject_types_supported': ['public'],
             'id_token_signing_alg_values_supported': ['RS256'],
             'token_endpoint_auth_methods_supported': ['client_secret_post']
@@ -258,6 +258,8 @@ class Main(http.Controller):
                 return json.dumps(self.__handle_grant_type_authorization_code(req, **query))
             elif query['grant_type'] == 'client_credentials':
                 return json.dumps(self.__handle_grant_type_client_credentials(req, **query))
+            elif query['grant_type'] == 'password':
+                return json.dumps(self.__handle_grant_type_password(req, **query))
             else:
                 raise OAuthException(
                     'Unsupported grant_type param: \'{}\''.format(query['grant_type']),
@@ -312,6 +314,46 @@ class Main(http.Controller):
         if 'openid' in payload['scopes']:
             extra_claims = { name: payload[name] for name in payload if name in ['sid', 'nonce'] }
             response['id_token'] = self.__create_id_token(req, payload['user_id'], client, extra_claims)
+        return response
+
+    def __handle_grant_type_password(self, req, **query):
+        client = self.__validate_client(req, **query)
+        if not client.allow_password_grant:
+            raise OAuthException(
+                'This client is not allowed to perform password flow',
+                OAuthException.UNSUPPORTED_GRANT_TYPE
+            )
+
+        for param in ['username', 'password']:
+            if param not in query:
+                raise OAuthException(
+                    '{} is required'.format(param),
+                    OAuthException.INVALID_REQUEST
+                )
+        user_id = req.env['res.users'].authenticate(
+            req.env.cr.dbname,
+            query['username'],
+            query['password'],
+            None
+        )
+        if not user_id:
+            raise OAuthException(
+                'Invalid username or password',
+                OAuthException.INVALID_REQUEST
+            )
+
+        scopes = query['scope'].split(' ') if query.get('scope') else []
+        # Retrieve/generate access token. We currently only store one per user/client
+        token = req.env['galicea_openid_connect.access_token'].sudo().retrieve_or_create(
+            user_id,
+            client.id
+        )
+        response = {
+            'access_token': token.token,
+            'token_type': 'bearer'
+        }
+        if 'openid' in scopes:
+            response['id_token'] = self.__create_id_token(req, user_id, client, {})
         return response
 
     def __handle_grant_type_client_credentials(self, req, **query):

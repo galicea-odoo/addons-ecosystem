@@ -30,6 +30,10 @@ class Client(models.Model):
         required=True,
         ondelete='restrict'
     )
+    allow_password_grant = fields.Boolean(
+        string='Allow OAuth2 password grant',
+        default=False,
+    )
 
     @api.model
     def __system_user_name(self, client_name):
