@@ -246,8 +246,19 @@ class Main(http.Controller):
 
         return self.__redirect(redirect_uri, response_params, response_mode)
 
-    @http.route('/oauth/token', auth='public', type='http', methods=['POST', 'OPTIONS'], csrf=False, cors='*')
+    @http.route('/oauth/token', auth='public', type='http', methods=['POST', 'OPTIONS'], csrf=False)
     def token(self, req, **query):
+        cors_headers = {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-Debug-Mode, Authorization',
+            'Access-Control-Max-Age': 60 * 60 * 24,
+        }
+        if req.httprequest.method == 'OPTIONS':
+            return http.Response(
+                status=200,
+                headers=cors_headers
+            )
+
         try:
             if 'grant_type' not in query:
                 raise OAuthException(
@@ -259,7 +270,10 @@ class Main(http.Controller):
             elif query['grant_type'] == 'client_credentials':
                 return json.dumps(self.__handle_grant_type_client_credentials(req, **query))
             elif query['grant_type'] == 'password':
-                return json.dumps(self.__handle_grant_type_password(req, **query))
+                return werkzeug.Response(
+                    response=json.dumps(self.__handle_grant_type_password(req, **query)),
+                    headers=cors_headers
+                )
             else:
                 raise OAuthException(
                     'Unsupported grant_type param: \'{}\''.format(query['grant_type']),
@@ -267,7 +281,7 @@ class Main(http.Controller):
                 )
         except OAuthException as e:
             body = json.dumps({'error': e.type, 'error_description': e.message})
-            return werkzeug.Response(response=body, status=400)
+            return werkzeug.Response(response=body, status=400, headers=cors_headers)
 
     def __handle_grant_type_authorization_code(self, req, **query):
         client = self.__validate_client(req, **query)

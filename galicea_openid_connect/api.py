@@ -20,9 +20,20 @@ def resource(path, method, auth='user'):
     assert auth in ['user', 'client']
 
     def endpoint_decorator(func):
-        @http.route(path, auth='public', type='http', methods=[method, 'OPTIONS'], csrf=False, cors='*')
+        @http.route(path, auth='public', type='http', methods=[method, 'OPTIONS'], csrf=False)
         @wraps(func)
         def func_wrapper(self, req, **query):
+            cors_headers = {
+                'Access-Control-Allow-Origin': '*',
+                'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-Debug-Mode, Authorization',
+                'Access-Control-Max-Age': 60 * 60 * 24,
+            }
+            if req.httprequest.method == 'OPTIONS':
+                return http.Response(
+                    status=200,
+                    headers=cors_headers
+                )
+
             try:
                 access_token = None
                 if 'Authorization' in req.httprequest.headers:
@@ -62,11 +73,16 @@ def resource(path, method, auth='user'):
                 req.context = ctx
 
                 response = func(self, req, **query)
-                return json.dumps(response)
+                return werkzeug.Response(
+                    response=json.dumps(response),
+                    headers=cors_headers,
+                    status=200
+                )
             except ApiException as e:
                 return werkzeug.Response(
                     response=json.dumps({'error': e.code, 'error_message': e.message}),
                     status=400,
+                    headers=cors_headers
                 )
             except:
                 _logger.exception('Unexpected exception while processing API request')
@@ -75,7 +91,8 @@ def resource(path, method, auth='user'):
                         'error': 'server_error',
                         'error_message': 'Unexpected server error',
                     }),
-                    status=500,
+                    headers=cors_headers,
+                    status=500
                 )
 
         return func_wrapper
