@@ -246,7 +246,7 @@ class Main(http.Controller):
 
         return self.__redirect(redirect_uri, response_params, response_mode)
 
-    @http.route('/oauth/token', auth='public', type='http', methods=['POST'], csrf=False)
+    @http.route('/oauth/token', auth='public', type='http', methods=['POST', 'OPTIONS'], csrf=False, cors='*')
     def token(self, req, **query):
         try:
             if 'grant_type' not in query:

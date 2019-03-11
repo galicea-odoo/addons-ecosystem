@@ -20,7 +20,7 @@ def resource(path, method, auth='user'):
     assert auth in ['user', 'client']
 
     def endpoint_decorator(func):
-        @http.route(path, auth='public', type='http', methods=[method], csrf=False)
+        @http.route(path, auth='public', type='http', methods=[method, 'OPTIONS'], csrf=False, cors='*')
         @wraps(func)
         def func_wrapper(self, req, **query):
             try:
