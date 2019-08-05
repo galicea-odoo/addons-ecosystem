@@ -6,7 +6,7 @@ import cgi
 from odoo.modules.module import load_information_from_description_file
 from odoo.tools import which
 
-from core import Check, CheckSuccess, CheckWarning, CheckFail
+from .core import Check, CheckSuccess, CheckWarning, CheckFail
 
 class DependencyCheck(Check):
     dependency_type = None

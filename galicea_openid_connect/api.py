@@ -79,8 +79,9 @@ def resource(path, method, auth='user'):
                     status=200
                 )
             except ApiException as e:
+                error_message = "error: {0}".format(e)
                 return werkzeug.Response(
-                    response=json.dumps({'error': e.code, 'error_message': e.message}),
+                    response=json.dumps({'error': e.code, 'error_message': error_message}),
                     status=400,
                     headers=cors_headers
                 )
