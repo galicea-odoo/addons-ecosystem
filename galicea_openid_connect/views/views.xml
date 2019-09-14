@@ -28,6 +28,7 @@
             <button class="oe_read_only" string="Show" type="action" name="%(client_action_secret)d" />
             <field name="auth_redirect_uri" />
             <field name="allow_password_grant" />
+            <field name="user_group_id" />
           </group>
         </form>
       </field>

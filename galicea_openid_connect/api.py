@@ -16,7 +16,13 @@ class ApiException(Exception):
         super(Exception, self).__init__(message)
         self.code = code if code else self.INVALID_REQUEST
 
-def resource(path, method, auth='user'):
+    def to_json(self):
+        return {
+            'error': self.code,
+            'error_message': self.message
+        }
+
+def resource(path, method, auth='user', clients=None):
     assert auth in ['user', 'client']
 
     def endpoint_decorator(func):
@@ -68,6 +74,10 @@ def resource(path, method, auth='user'):
                         )
                     req.uid = token.client_id.system_user_id.id
 
+                if clients:
+                    if token.client_id.id not in map(lambda c: req.env.ref(c).id, clients):
+                        raise ApiException('Access denied', 'restricted_app')
+
                 ctx = req.context.copy()
                 ctx.update({'client_id': token.client_id.id})
                 req.context = ctx
@@ -78,21 +88,16 @@ def resource(path, method, auth='user'):
                     headers=cors_headers,
                     status=200
                 )
-            except ApiException as e:
+            except Exception as e:
+                status = 400
+                if not isinstance(e, ApiException):
+                    _logger.exception('Unexpected exception while processing API request')
+                    e = ApiException('Unexpected server error', 'server_error')
+                    status = 500
                 return werkzeug.Response(
-                    response=json.dumps({'error': e.code, 'error_message': e.message}),
-                    status=400,
+                    response=json.dumps(e.to_json()),
+                    status=status,
                     headers=cors_headers
-                )
-            except:
-                _logger.exception('Unexpected exception while processing API request')
-                return werkzeug.Response(
-                    response=json.dumps({
-                        'error': 'server_error',
-                        'error_message': 'Unexpected server error',
-                    }),
-                    headers=cors_headers,
-                    status=500
                 )
 
         return func_wrapper
