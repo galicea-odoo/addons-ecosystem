@@ -33,6 +33,7 @@ def resource(path, method, auth='user', clients=None):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-Debug-Mode, Authorization',
                 'Access-Control-Max-Age': 60 * 60 * 24,
+                'Access-Control-Allow-Methods': 'OPTIONS, HEAD, GET, POST, PUT, DELETE'
             }
             if req.httprequest.method == 'OPTIONS':
                 return http.Response(
