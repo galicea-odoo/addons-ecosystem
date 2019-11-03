@@ -9,7 +9,7 @@
     'website': "http://galicea.pl",
 
     'category': 'Technical Settings',
-    'version': '12.0.0.1',
+    'version': '12.0.0.2',
 
     'depends': ['web', 'galicea_environment_checkup','galicea_base'],
 

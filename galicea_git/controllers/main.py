@@ -9,6 +9,11 @@ import werkzeug
 from ..http_chunked_fix import http_input_stream
 
 class Main(http.Controller):
+    def authorize(self, request):
+        auth = request.httprequest.authorization
+        if auth:
+            request.session.authenticate(request.session.db, auth.username, auth.password)
+
     @http.route(
         [
             '/git/<repo>',
@@ -18,9 +23,7 @@ class Main(http.Controller):
         csrf=False
     )
     def git(self, request, repo, **kw):
-        auth = request.httprequest.authorization
-        if auth:
-            request.session.authenticate(request.session.db, auth.username, auth.password)
+        self.authorize(request)
         if not request.env.uid or request.env.user.login == 'public':
             return werkzeug.Response(
                 headers=[('WWW-Authenticate', 'Basic')],
@@ -74,7 +77,7 @@ class Main(http.Controller):
             if name == 'Status':
                 http_code = int(value.split(b' ')[0])
             else:
-                headers.append((name, value))
+                headers.append((name.decode('ascii'), value.decode('ascii')))
 
         return werkzeug.Response(
             body,
