@@ -27,13 +27,13 @@
           <div style="display: flex; background-color: white; padding: 10px; margin: 10px">
             <div style="flex-grow: 0; flex-shrink: 0; width:50px; margin-right: 20px">
               <t t-if="check.result == 'success'">
-                <i class="fa fa-check fa-4x" style="color: green" aria-hidden="true"></i>
+                <i class="fa fa-check fa-4x" style="color: green" ></i>
               </t>
               <t t-if="check.result == 'warning'">
-                <i class="fa fa-exclamation-triangle fa-4x" style="color: orange" aria-hidden="true"></i>
+                <i class="fa fa-exclamation-triangle fa-4x" style="color: orange" ></i>
               </t>
               <t t-if="check.result == 'fail'">
-                <i class="fa fa-exclamation-circle fa-4x" style="color: red" aria-hidden="true"></i>
+                <i class="fa fa-exclamation-circle fa-4x" style="color: red" ></i>
               </t>
             </div>
             <div style="flex-grow: 1; flex-shrink: 1">

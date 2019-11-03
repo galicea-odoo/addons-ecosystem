@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+  <menuitem name="Galicea" id="galicea_admin_menu"
+       parent="base.menu_administration" groups="base.group_erp_manager" />
+
+</odoo>

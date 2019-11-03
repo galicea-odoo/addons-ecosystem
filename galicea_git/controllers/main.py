@@ -65,14 +65,14 @@ class Main(http.Controller):
             shell=True
         )
         stdout, stderr = git.communicate(http_input_stream(request).read())
-        headers_str, body = stdout.split("\r\n\r\n", 2)
+        headers_str, body = stdout.split(b"\r\n\r\n", 2)
 
         http_status_code = 200
         headers = []
-        for header in headers_str.split("\r\n"):
-            name, value = header.split(': ', 2)
+        for header in headers_str.split(b"\r\n"):
+            name, value = header.split(b': ', 2)
             if name == 'Status':
-                http_code = int(value.split(' ')[0])
+                http_code = int(value.split(b' ')[0])
             else:
                 headers.append((name, value))
 

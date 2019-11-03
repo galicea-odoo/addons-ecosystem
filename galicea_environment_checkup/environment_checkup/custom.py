@@ -2,7 +2,7 @@
 
 import collections
 
-from core import Check
+from .core import Check
 
 custom_checks_per_module = collections.defaultdict(list)
 

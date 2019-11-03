@@ -1,5 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <record id="repository_view_form" model="ir.ui.view">
+    <data>
+
+   <record id="repository_view_form" model="ir.ui.view">
     <field name="model">galicea_git.repository</field>
     <field name="arch" type="xml">
       <form>
@@ -33,34 +36,8 @@
         name="Git repositories"
         res_model="galicea_git.repository" />
 
-  <record id="config_settings_view_form" model="ir.ui.view">
-    <field name="model">galicea_git.config.settings</field>
-    <field name="arch" type="xml">
-      <form string="Git hosting settings" class="oe_form_configuration">
-        <header>
-          <button string="Save" type="object" name="execute" class="oe_highlight"/>
-          <button string="Cancel" type="object" name="cancel" class="oe_link"/>
-        </header>
-        <field name="git_http_backend_valid" invisible="1" />
-        <group>
-          <label for="git_http_backend" />
-          <span>
-            <field name="git_http_backend" nolabel="True" class="oe_inline" style="min-width:300px; margin-right:5px" />
-            <i class="fa fa-check" aria-hidden="true" style="color: green"
-                attrs="{'invisible': [('git_http_backend_valid', '=', False)]}" />
-            <i class="fa fa-times" aria-hidden="true" style="color: red"
-                attrs="{'invisible': [('git_http_backend_valid', '=', True)]}" />
-          </span>
-        </group>
-      </form>
-    </field>
-  </record>
+    <menuitem name="Repositories" id="repo_menu" parent="galicea_base.galicea_admin_menu" 
+              action="repository_action" sequence="1" />
 
-  <act_window id="config_settings_action" name="Settings" res_model="galicea_git.config.settings"
-      view_mode="form" target="inline" />
-
-  <menuitem name="Git hosting" id="root_menu" sequence="20" />
-  <menuitem name="Repositories" id="repo_menu" parent="galicea_git.root_menu" action="repository_action" sequence="1" />
-  <menuitem name="Settings" id="settings_menu" parent="galicea_git.root_menu" action="config_settings_action" sequence="99"
-       groups="galicea_git.group_admin" />
+    </data>
 </odoo>

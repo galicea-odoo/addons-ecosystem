@@ -5,6 +5,11 @@ import random
 import shutil
 import string
 import subprocess
+try:
+    import git
+except ImportError:
+    pass
+
 
 from odoo import models, fields, api, http
 from odoo.exceptions import ValidationError
@@ -56,7 +61,7 @@ class Repository(models.Model):
 
     @api.constrains('system_name')
     def _validate_system_name(self):
-        allowed_characters = string.ascii_lowercase + string.digits + '-'
+        allowed_characters = string.ascii_lowercase + string.digits + '-_'
         if not all(c in allowed_characters for c in self.system_name):
             raise ValidationError(
                 'Only lowercase, digits and hyphens (-) are allowed in directory name'

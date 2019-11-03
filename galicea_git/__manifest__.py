@@ -9,9 +9,9 @@
     'website': "http://galicea.pl",
 
     'category': 'Technical Settings',
-    'version': '10.0.1.0',
+    'version': '12.0.0.1',
 
-    'depends': ['web', 'galicea_environment_checkup'],
+    'depends': ['web', 'galicea_environment_checkup','galicea_base'],
 
     'external_dependencies': {
         'bin': ['git']

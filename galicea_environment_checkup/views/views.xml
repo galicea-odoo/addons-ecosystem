@@ -5,7 +5,7 @@
     <field name="tag">galicea_environment_checkup.dashboard</field>
   </record>
   <menuitem name="Environment check-up" id="dashboard_menu"
-      action="dashboard_action" parent="base.menu_administration" groups="base.group_erp_manager" />
+      action="dashboard_action" parent="galicea_base.galicea_admin_menu" groups="base.group_erp_manager" />
 
   <record id="module_form" model="ir.ui.view">
     <field name="name">module_form.checks</field>

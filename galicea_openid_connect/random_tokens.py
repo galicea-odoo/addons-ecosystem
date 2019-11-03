@@ -3,7 +3,7 @@
 from random import SystemRandom
 
 def random_token(length, byte_filter):
-    allowed_bytes = ''.join(c for c in map(chr, range(256)) if byte_filter(c))
+    allowed_bytes = ''.join(c for c in map(chr, range(128)) if byte_filter(c))
     random = SystemRandom()
     return ''.join([random.choice(allowed_bytes) for _ in range(length)])
 

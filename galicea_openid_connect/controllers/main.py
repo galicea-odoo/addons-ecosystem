@@ -47,7 +47,6 @@ class OAuthException(Exception):
     UNSUPPORTED_RESPONSE_TYPE = 'unsupported_response_type'
     INVALID_GRANT = 'invalid_grant'
     UNSUPPORTED_GRANT_TYPE = 'unsupported_grant_type'
-    RESTRICTED_APP = 'restricted_app'
 
     def __init__(self, message, type):
         super(Exception, self).__init__(message)
@@ -102,15 +101,6 @@ class Main(http.Controller):
             raise OAuthException(
                 'client_secret param is not valid',
                 OAuthException.INVALID_CLIENT,
-            )
-
-    def __validate_user(self, client, user):
-        if not client.user_group_id:
-            return
-        if client.user_group_id not in user.groups_id:
-            raise OAuthException(
-                'User is not allowed to use this client',
-                OAuthException.RESTRICTED_APP
             )
 
     @http.route('/.well-known/openid-configuration', auth='public', type='http')
@@ -216,7 +206,6 @@ class Main(http.Controller):
             }
             return self.__redirect('/web/login', params, 'query')
 
-        self.__validate_user(client, user)
         response_types = response_type.split()
 
         extra_claims = {
@@ -366,7 +355,7 @@ class Main(http.Controller):
                 'Invalid username or password',
                 OAuthException.INVALID_REQUEST
             )
-        self.__validate_user(client, req.env['res.users'].sudo().browse(user_id))
+
         scopes = query['scope'].split(' ') if query.get('scope') else []
         # Retrieve/generate access token. We currently only store one per user/client
         token = req.env['galicea_openid_connect.access_token'].sudo().retrieve_or_create(

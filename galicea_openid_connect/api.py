@@ -16,13 +16,7 @@ class ApiException(Exception):
         super(Exception, self).__init__(message)
         self.code = code if code else self.INVALID_REQUEST
 
-    def to_json(self):
-        return {
-            'error': self.code,
-            'error_message': self.message
-        }
-
-def resource(path, method, auth='user', clients=None):
+def resource(path, method, auth='user'):
     assert auth in ['user', 'client']
 
     def endpoint_decorator(func):
@@ -33,7 +27,6 @@ def resource(path, method, auth='user', clients=None):
                 'Access-Control-Allow-Origin': '*',
                 'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept, X-Debug-Mode, Authorization',
                 'Access-Control-Max-Age': 60 * 60 * 24,
-                'Access-Control-Allow-Methods': 'OPTIONS, HEAD, GET, POST, PUT, DELETE'
             }
             if req.httprequest.method == 'OPTIONS':
                 return http.Response(
@@ -75,10 +68,6 @@ def resource(path, method, auth='user', clients=None):
                         )
                     req.uid = token.client_id.system_user_id.id
 
-                if clients:
-                    if token.client_id.id not in map(lambda c: req.env.ref(c).id, clients):
-                        raise ApiException('Access denied', 'restricted_app')
-
                 ctx = req.context.copy()
                 ctx.update({'client_id': token.client_id.id})
                 req.context = ctx
@@ -89,16 +78,22 @@ def resource(path, method, auth='user', clients=None):
                     headers=cors_headers,
                     status=200
                 )
-            except Exception as e:
-                status = 400
-                if not isinstance(e, ApiException):
-                    _logger.exception('Unexpected exception while processing API request')
-                    e = ApiException('Unexpected server error', 'server_error')
-                    status = 500
+            except ApiException as e:
+                error_message = "error: {0}".format(e)
                 return werkzeug.Response(
-                    response=json.dumps(e.to_json()),
-                    status=status,
+                    response=json.dumps({'error': e.code, 'error_message': error_message}),
+                    status=400,
                     headers=cors_headers
+                )
+            except:
+                _logger.exception('Unexpected exception while processing API request')
+                return werkzeug.Response(
+                    response=json.dumps({
+                        'error': 'server_error',
+                        'error_message': 'Unexpected server error',
+                    }),
+                    headers=cors_headers,
+                    status=500
                 )
 
         return func_wrapper

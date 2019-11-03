@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import custom, dependencies
+from . import custom, dependencies
 
 def all_installed_checks(env):
     result = []

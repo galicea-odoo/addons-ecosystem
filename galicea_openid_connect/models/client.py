@@ -34,10 +34,6 @@ class Client(models.Model):
         string='Allow OAuth2 password grant',
         default=False,
     )
-    user_group_id = fields.Many2one(
-        'res.groups',
-        'Restrict the client to a group'
-    )
 
     @api.model
     def __system_user_name(self, client_name):

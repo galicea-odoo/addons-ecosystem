@@ -1,9 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
 <odoo>
-  <data noupdate="1">
-    <record id="config_git_backend_path" model="ir.config_parameter">
-      <field name="key">galicea_git.git_http_backend</field>
-      <field name="value">/usr/lib/git-core/git-http-backend</field>
-      <field name="group_ids" eval="[(4, ref('galicea_git.group_admin'))]" />
-    </record>
+    <data noupdate="1">
+
+        <record id="config_git_backend_path" model="ir.config_parameter">
+         <field name="key">galicea_git.git_http_backend</field>
+         <field name="value">/usr/lib/git-core/git-http-backend</field>
+         <field name="group_ids" eval="[(4, ref('galicea_git.group_admin'))]" />
+       </record>
+
   </data>
 </odoo>

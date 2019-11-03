@@ -28,7 +28,6 @@
             <button class="oe_read_only" string="Show" type="action" name="%(client_action_secret)d" />
             <field name="auth_redirect_uri" />
             <field name="allow_password_grant" />
-            <field name="user_group_id" />
           </group>
         </form>
       </field>
@@ -61,7 +60,7 @@
         name="OpenID Clients"
         res_model="galicea_openid_connect.client" />
 
-    <menuitem name="OpenID Connect Provider" id="root_menu" sequence="19" />
-    <menuitem name="Clients" id="client_menu" parent="galicea_openid_connect.root_menu" action="client_action" />
+    <menuitem name="OpenID Connect Provider" id="client_menu" 
+            parent="galicea_base.galicea_admin_menu" action="client_action" />
   </data>
 </odoo>

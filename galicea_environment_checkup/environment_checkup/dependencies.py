@@ -6,7 +6,7 @@ import cgi
 from odoo.modules.module import load_information_from_description_file
 from odoo.tools import which
 
-from core import Check, CheckSuccess, CheckWarning, CheckFail
+from .core import Check, CheckSuccess, CheckWarning, CheckFail
 
 class DependencyCheck(Check):
     dependency_type = None
@@ -36,8 +36,10 @@ class DependencyCheck(Check):
             version_operator = version[:2]
             version = version[2:]
 
+        # Py3 : map -> list(map
+        #  https://stackoverflow.com/questions/33717314/attributeerror-map-obejct-has-no-attribute-index-python-3
         try:
-            parsed_version = map(int, version.split('.'))
+            parsed_version = list(map(int, version.split('.')))
         except ValueError:
             raise CheckFail(
                 'Invalid version expression',
@@ -45,7 +47,7 @@ class DependencyCheck(Check):
 Allowed expressions are <pre>=x.y.z</pre>, <pre>&gt;=x.y.z</pre>, <pre>^x.z.y</pre>,
 <pre>~x.y.z. Got <pre>{}</pre>""".format(cgi.escape(self.dependency['version']))
             )
-        parsed_installed_version = map(int, installed_version.split('.'))
+        parsed_installed_version = list(map(int, installed_version.split('.'))) 
 
         parsed_version.extend(0 for _ in range(len(parsed_installed_version) - len(parsed_version)))
         parsed_installed_version.extend(0 for _ in range(len(parsed_version) - len(parsed_installed_version)))
@@ -132,7 +134,7 @@ class ExternalDependencyCheck(DependencyCheck):
     def _installed_version(self, env, name):
         try:
             exe = which(name)
-            out = subprocess.check_output([exe, '--version'])
+            out = str(subprocess.check_output([exe, '--version'])) # Py3 str()
             match = re.search('[\d.]+', out)
             if not match:
                 raise CheckWarning(

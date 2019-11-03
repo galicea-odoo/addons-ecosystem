@@ -1,0 +1,11 @@
+<odoo>
+  <data>
+    <template id="assets_backend" inherit_id="web.assets_backend">
+      <xpath expr="." position="inside">
+        <script src="/galicea_toolset/static/src/js/iframe_widget.js" type="text/javascript" />
+        <script src="/galicea_toolset/static/src/js/one2many_flexible_widget.js" type="text/javascript" />
+        <script src="/galicea_toolset/static/src/js/client_actions.js" type="text/javascript" />
+      </xpath>
+    </template>
+  </data>
+</odoo>
